@@ -1,0 +1,355 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Noto+Serif+Old+Uyghur&display=swap');
+
+/* Formatação do Corpo */
+body {
+  background-color: rgb(0, 0, 0) !important; /* Usa !important como último recurso */
+}
+
+#cabecalho {
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  height: 110px; /* Altura do cabeçalho */
+  margin-bottom: 20px; /* Espaçamento inferior */
+}
+
+/* Estilo para a imagem da logo */
+#cabecalho img {
+  max-width: 100%;
+  height: auto;
+}
+/* Estilo dos links do cabeçalho */
+.header-link {
+    text-decoration: none; /* Remove o sublinhado do link */
+    color: white; /* Mantém a cor do cabeçalho */
+    
+}
+
+.header-link:hover {
+    color: #ffcc00; /* Cor ao passar o mouse */
+    opacity: 0.8; /* Efeito de hover se desejado */
+}
+
+/* Estilo dos cabeçalhos */
+h1 {
+    text-align: center; /* Centraliza o título */
+    color: rgb(253, 253, 253); /* Cor do texto do título, usando variável para manter a consistência */
+    font-family: "Kaushan Script", cursive; /* Fonte personalizada */
+    font-weight: 400; /* Peso da fonte */
+    font-size: 50px; /* Tamanho da fonte */
+    margin: 20px 0; /* Margem superior e inferior para espaçamento */
+}
+
+h2 {
+    text-align: center; /* Centraliza o subtítulo */
+    color: var(--foreground); /* Cor do texto do subtítulo, usando variável para manter a consistência */
+    font-family: "Kaushan Script", cursive; /* Fonte personalizada */
+    font-size: 70px; /* Tamanho da fonte */
+    margin-top: -3%; /* Margem superior negativa, pode ser ajustada conforme necessário */
+    margin-bottom: 20px; /* Margem inferior para espaçamento */
+}
+
+
+/* Carrossel */
+#carouselExampleIndicators {
+    margin: 0 auto; /* Centraliza o carrossel na página */
+    width: 600px; /* Largura do carrossel */
+    border: 2px solid #E5A220; /* Borda ao redor do carrossel */
+    border-radius: 10px; /* Bordas arredondadas */
+    overflow: hidden; /* Oculta partes das imagens que saem do limite */
+}
+
+.carousel-inner {
+    height: 500px; /* Altura total do carrossel */
+}
+
+.carousel-inner img {
+    height: 100%; /* Preenche a altura do carrossel */
+    width: 100%; /* Preenche a largura do carrossel */
+    object-fit: cover; /* Mantém a proporção e cobre todo o espaço */
+}
+
+/* Estilo dos controles do carrossel */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #E5A220; /* Cor de fundo dos ícones de controle */
+    border-radius: 50%; /* Bordas arredondadas para os ícones */
+}
+
+.carousel-indicators button {
+    background-color: #E5A220; /* Cor dos botões dos indicadores */
+}
+
+.carousel-indicators .active {
+    background-color: #b60303; /* Cor do botão ativo dos indicadores */
+}
+
+/* Define uma largura fixa e uniforme para todos os botões */
+.btn-custom {
+    width: 350px; /* Definir largura uniforme */
+    text-align: center; /* Centraliza o texto do botão */
+    display: inline-flex; /* Exibe os itens em linha */
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+}
+
+
+/*Pagina cardapio css 
+
+/* Ajustes para a seção de menu */
+.menu-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    gap: 50px; /* Espaçamento entre os itens do menu */
+}
+
+.menu-item {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Mantém a cor do texto */
+    display: flex; /* Alinha o ícone e o texto */
+    align-items: center; /* Centraliza verticalmente */
+}
+
+.menu-icon {
+    width: 45px;
+    height: 45px;
+}
+
+.menu-text {
+    display: block;
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #E5A220;
+}
+
+.menu-item:hover .menu-text {
+    color: #ffffff; /* Cor ao passar o mouse no texto */
+}
+
+.menu-item:hover .menu-icon {
+    filter: brightness(1.2); /* Efeito de brilho ao passar o mouse no ícone */
+}
+ /* Estilos para o card */
+ .card {
+    margin-top: 5%;
+    width: 18rem;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    background-color: #1c1c1c !important; /* Força o fundo escuro */
+    color: #ffffff !important; /* Força o texto branco */
+    margin-left: 5%;
+}
+.card:hover {
+    transform: scale(1.05); /* Efeito de zoom ao passar o mouse */
+    box-shadow: 0px 6px 12px rgba(255, 217, 1, 0.384); /* Aumenta a sombra ao passar o mouse */
+}
+
+/* Estilo para a imagem do card */
+.card-img-top {
+    width: 100%; /* A imagem preenche a largura do card */
+    height: 200px; /* Define uma altura fixa para a imagem */
+    object-fit: cover; /* A imagem mantém suas proporções e cobre todo o espaço */
+    border-radius: 10px 10px 0 0; /* Bordas arredondadas na parte superior da imagem */
+    
+}
+/* Estilo para o título do card */
+
+.card-body .card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #E5A220; /* Cor dourada para o título */
+    text-align: left; /* Centraliza o texto */
+    background-color: #1c1c1c;
+}
+
+.icon {
+    width: 30px; /* Largura do ícone */
+    margin-right: 10px; /* Espaçamento entre o ícone e o texto */
+}
+
+ /* Formatação do Rodapé */
+ 
+ footer#rodape {
+    display: block;
+    width: 1200px;
+    height: 50px;
+    margin-top: 1100px;
+    padding-left: 550px;
+    color: #ffffffff;   
+    align-items: center;
+}
+
+footer#rodape p#copy {
+    text-align: justify;
+    color: yellow;
+}
+
+footer#rodape p#links {
+    text-align: justify;
+    color: yellow;
+    padding-left: 50px;
+}
+
+footer#rodape a {
+    text-decoration: none;
+    color: yellow;
+}
+
+footer#rodape img#bsl{
+    width: 40px;
+    height: 40px;
+    margin-left: -80px;
+    margin-top: -200px;
+    padding-bottom: 50px;
+    padding-left: 35px;
+}
+
+/* Formulário */
+.form-card {
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%; /* Aumenta a largura do formulário */
+    max-width: 600px; /* Define uma largura máxima */
+    margin: 0 auto; /* Centraliza o formulário */
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    font-size: 1.8rem;
+}
+
+.form-button {
+    width: 100%;
+    background-color: #E5A220 !important; /* Cor do botão */
+    color: #fff; /* Cor do texto do botão */
+    border: none;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    transition: background-color 0.3s;
+}
+
+.form-button:hover {
+    background-color: #333; /* Cor do botão ao passar o mouse */
+}
+
+/*cadastro*/
+
+
+.form-container {
+    background-color: #1f1f1f; /* Cor de fundo do formulário */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 50%; /* Aumenta a largura do formulário */
+    max-width: 600px; /* Define uma largura máxima */
+    margin: 0 auto; /* Centraliza o formulário */
+    margin-top: 50px;
+}
+
+.form-container h1 {
+    color: #E5A220;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    font-size: 1.8rem;
+}
+.text-center {
+    text-align: center; /* Centralizar o conteúdo */
+}
+
+.form-label {
+    font-weight: bold; /* Negrito para o rótulo */
+    color: #E5A220;
+font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;}
+
+.w-100 {
+    width: 50%;
+    color: #141414; /* Cor do texto do botão */
+    border: none;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    border-radius: 8px; /* Bordas arredondadas */
+    margin-bottom: 25px;
+}
+
+/* Estilizar os inputs para ficarem com a mesma largura */
+.form-control {
+    width: 93%; /* Largura total */
+    display: block; /* Certifique-se de que os controles sejam tratados como blocos */
+    border-radius: 8px; /* Bordas arredondadas */
+    padding: 10px; /* Espaçamento interno */
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+/* Estilizando o Form.Select para corresponder ao resto do formulário */
+.form-select {
+    width: 581px; /* Largura total */
+    display: block; /* Certifique-se de que o controle seja tratado como bloco */
+    border-radius: 8px; /* Bordas arredondadas */
+    padding: 10px; /* Espaçamento interno */
+    margin-bottom: 5px; /* Espaçamento inferior */
+    margin-top: 5px; /* Espaçamento superior */
+    background-color: #ffffff; /* Cor de fundo consistente */
+    color: #000000; /* Cor do texto */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+
+/*tabela de listagem*/
+/* Estilos para a tabela de pedidos */
+.custom-table {
+    width: 100%;
+    margin-top: 1rem;
+    background-color:#1f1f1f;
+    color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0);
+    border-collapse: collapse;
+
+}
+
+.custom-table thead {
+    background-color: #000000;
+    color: #E5A220;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+
+.custom-table tbody tr:hover {
+    background-color: #52525293;
+
+}
+
+/* Estilos para ícones com hover */
+.hover-icon {
+    transition: color 0.3s ease;
+}
+
+.hover-icon:hover {
+    color: darkorange;
+}
+
+/* Estilos para a célula de ações */
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
