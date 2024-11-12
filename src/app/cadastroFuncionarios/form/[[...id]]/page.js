@@ -10,17 +10,18 @@ import { FaCheck } from "react-icons/fa";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { mask } from "remask";
 import { v4 as uuidv4 } from "uuid";
+import cadastroFuncionariosValidator from "../../../../../validators/cadastroFuncionariosValidator";
+
 
 export default function Page() {
     const route = useRouter();
     const searchParams = useSearchParams();
-    const id = searchParams ? searchParams.get("id") : null; // Verifique se searchParams existe antes de acessar "id"
+    const id = searchParams ? searchParams.get("id") : null;
 
-    // Estado para os dados do funcionário
     const [funcionario, setFuncionario] = useState({ nome: '', cargo: '', dataAdmissao: '', pisoSalarial: '' });
 
     useEffect(() => {
-        if (id) { // Só busca dados se o id estiver disponível
+        if (id) {
             const funcionarios = JSON.parse(localStorage.getItem('funcionarios')) || [];
             const dados = funcionarios.find(item => item.id == id);
             setFuncionario(dados || { nome: '', cargo: '', dataAdmissao: '', pisoSalarial: '' });
@@ -30,8 +31,9 @@ export default function Page() {
     function salvar(dados) {
         const funcionarios = JSON.parse(localStorage.getItem('funcionarios')) || [];
 
-        if (funcionario.id) {
-            Object.assign(funcionario, dados);
+        if (id) {
+            const index = funcionarios.findIndex(item => item.id === id);
+            funcionarios[index] = { ...funcionarios[index], ...dados };
         } else {
             dados.id = uuidv4();
             funcionarios.push(dados);
@@ -45,6 +47,7 @@ export default function Page() {
         <Pagina titulo="Funcionário">
             <Formik
                 initialValues={funcionario}
+                validationSchema={cadastroFuncionariosValidator} // Adicionando o validator ao Formik
                 onSubmit={values => salvar(values)}
                 enableReinitialize
             >
@@ -53,6 +56,8 @@ export default function Page() {
                     handleChange,
                     handleSubmit,
                     setFieldValue,
+                    errors,
+                    touched,
                 }) => (
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="nome">
@@ -62,7 +67,11 @@ export default function Page() {
                                 name="nome"
                                 value={values.nome}
                                 onChange={handleChange}
+                                isInvalid={touched.nome && errors.nome} // Exibindo erro se existir
                             />
+                            <Form.Control.Feedback type="invalid" className="text-danger">
+                                {errors.nome}
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="cargo">
@@ -71,6 +80,7 @@ export default function Page() {
                                 name="cargo"
                                 value={values.cargo}
                                 onChange={handleChange}
+                                isInvalid={touched.cargo && errors.cargo}
                             >
                                 <option value=''>Selecione um cargo</option>
                                 <option value='cozinheiro'>Cozinheiro</option>
@@ -81,6 +91,9 @@ export default function Page() {
                                 <option value='serviços gerais'>Serviços Gerais</option>
                                 <option value='entregador'>Entregador</option>
                             </Form.Select>
+                            <Form.Control.Feedback type="invalid" className="text-danger">
+                                {errors.cargo}
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="dataAdmissao">
@@ -90,7 +103,11 @@ export default function Page() {
                                 name="dataAdmissao"
                                 value={values.dataAdmissao}
                                 onChange={handleChange}
+                                isInvalid={touched.dataAdmissao && errors.dataAdmissao}
                             />
+                            <Form.Control.Feedback type="invalid" className="text-danger">
+                                {errors.dataAdmissao}
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="pisoSalarial">
@@ -100,9 +117,13 @@ export default function Page() {
                                 name="pisoSalarial"
                                 value={values.pisoSalarial}
                                 onChange={(e) => {
-                                    setFieldValue('pisoSalarial', mask(e.target.value, ['R$ 9999,99']))
+                                    setFieldValue('pisoSalarial', mask(e.target.value, ['R$ 9999,99']));
                                 }}
+                                isInvalid={touched.pisoSalarial && errors.pisoSalarial}
                             />
+                            <Form.Control.Feedback type="invalid" className="text-danger">
+                                {errors.pisoSalarial}
+                            </Form.Control.Feedback>
                         </Form.Group>
 
                         <div className="text-center">
@@ -117,5 +138,5 @@ export default function Page() {
                 )}
             </Formik>
         </Pagina>
-    )
+    );
 }

@@ -8,6 +8,13 @@ import { Button, Form } from "react-bootstrap";
 import { FaCheck } from "react-icons/fa";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { v4 as uuidv4 } from 'uuid'; // Importando o uuid
+import * as Yup from 'yup'; // Importando o Yup
+
+// Definindo o validator para o formulário de pagamento
+const formaPagamentoValidator = Yup.object({
+    nome: Yup.string()
+        .required('Campo obrigatório') // Definindo a mensagem de erro
+});
 
 export default function FormasPagamentoForm({ params }) {
     const route = useRouter();
@@ -48,9 +55,10 @@ export default function FormasPagamentoForm({ params }) {
                 <h1>{formaPagamento.id ? 'Editar Forma de Pagamento' : 'Adicionar Forma de Pagamento'}</h1>
                 <Formik
                     initialValues={formaPagamento}
+                    validationSchema={formaPagamentoValidator} // Aplicando o schema de validação
                     onSubmit={values => salvar(values)}
                 >
-                    {({ values, handleChange, handleSubmit }) => (
+                    {({ values, handleChange, handleSubmit, errors, touched }) => (
                         <Form onSubmit={handleSubmit}>
                             <Form.Group className="mb-3" controlId="nome">
                                 <Form.Label>Forma de Pagamento:</Form.Label>
@@ -59,8 +67,11 @@ export default function FormasPagamentoForm({ params }) {
                                     name="nome"
                                     value={values.nome}
                                     onChange={handleChange('nome')}
-                                    required
+                                    isInvalid={touched.nome && errors.nome} // Verifica se o campo foi tocado e tem erro
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.nome} {/* Exibe a mensagem de erro */}
+                                </Form.Control.Feedback>
                             </Form.Group>
 
                             <div className="text-center">

@@ -353,3 +353,15 @@ font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;}
     justify-content: center;
     gap: 8px;
 }
+
+/* Adicionando ao arquivo CSS global do seu projeto */
+.text-danger {
+    color: red !important; /* Garante que a cor seja vermelha */
+    font-size: 14px; /* Opcional: ajustar o tamanho da fonte */
+    font-weight: bold; /* Opcional: deixar o texto em negrito */
+}
+
+.invalid-feedback {
+    color: red;
+    font-size: 0.875rem; /* Ajuste conforme necessário */
+}

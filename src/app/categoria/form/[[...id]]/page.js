@@ -1,77 +1,87 @@
 'use client'
 
+import Pagina from "@/components/Pagina";
 import { Formik } from "formik";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { FaCheck } from "react-icons/fa";
 import { MdOutlineArrowBack } from "react-icons/md";
-import { v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
+import categoriaValidator from "../../../../../validators/categoriaValidator";
 
-export default function Page({ params }) {
+export default function Page() {
     const route = useRouter();
-    const categorias = JSON.parse(localStorage.getItem('categorias')) || [];
-    const dados = categorias.find(item => item.id === params.id); // Comparação estrita
-    const categoria = dados || { nome: ''};
+    const searchParams = useSearchParams();
+    const id = searchParams ? searchParams.get("id") : null;
+
+    const [categoria, setCategoria] = useState({ nome: '' });
+
+    useEffect(() => {
+        if (id) {
+            const categorias = JSON.parse(localStorage.getItem('categorias')) || [];
+            const dados = categorias.find(item => item.id == id);
+            setCategoria(dados || { nome: '' });
+        }
+    }, [id]);
 
     function salvar(dados) {
-        if (categoria.id) {
-            Object.assign(categoria, dados);
+        const categorias = JSON.parse(localStorage.getItem('categorias')) || [];
+
+        if (id) {
+            const index = categorias.findIndex(item => item.id === id);
+            categorias[index] = { ...categorias[index], ...dados };
         } else {
-            dados.id = v4();
+            dados.id = uuidv4();
             categorias.push(dados);
         }
 
-        localStorage.setItem('categorias', JSON.stringify(categorias)); // Corrigido para 'categorias'
-        return route.push('/categoria');
+        localStorage.setItem('categorias', JSON.stringify(categorias));
+        route.push('/cadastroCategorias');
     }
 
     return (
-        <>
-            <header id="cabecalho" className="text-center my-3">
-                <Link href="/home" passHref>
-                    <img src="/imagens/rbg.png" alt="Logo The Burguer" width={350} height={350} />
-                </Link>
-            </header>
+        <Pagina titulo="Categoria">
+            <Formik
+                initialValues={categoria}
+                onSubmit={values => salvar(values)}
+                validationSchema={categoriaValidator} // Aplicando o validator
+                enableReinitialize
+            >
+                {({
+                    values,
+                    handleChange,
+                    handleSubmit,
+                    errors,
+                    touched,
+                }) => (
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3" controlId="nome">
+                            <Form.Label>Nome</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="nome"
+                                value={values.nome}
+                                onChange={handleChange}
+                                isInvalid={touched.nome && errors.nome}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.nome}
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-            <div className="form-container">
-                <h1>{categoria.id ? 'Editar categoria' : 'Adicionar categoria'}</h1>
-                <Formik
-                    initialValues={categoria}
-                    onSubmit={values => salvar(values)}
-                >
-                    {({
-                        values,
-                        handleChange,
-                        handleSubmit,
-                    }) => (
-                        <Form onSubmit={handleSubmit}>
-                            <Form.Group className="mb-3" controlId="nome">
-                                <Form.Label>Nome:</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="nome"
-                                    value={values.nome}
-                                    onChange={handleChange('nome')}
-                                    required
-                                />
-                            </Form.Group>
-
-                            <div className="text-center">
-                                <Button type="submit" variant="success" className="w-100">
-                                    <FaCheck /> Salvar
-                                </Button>
-                            </div>
-                            <Link
-                                href="/categoria"
-                                className="btn btn-danger w-100 mt-2"
-                            >
+                        <div className="text-center">
+                            <Button type="submit" variant="success">
+                                <FaCheck /> Salvar
+                            </Button>
+                            <Link href="/cadastroCategorias" className="btn btn-danger ms-2">
                                 <MdOutlineArrowBack /> Voltar
                             </Link>
-                        </Form>
-                    )}
-                </Formik>
-            </div>
-        </>
-    );
+                        </div>
+                    </Form>
+                )}
+            </Formik>
+        </Pagina>
+    )
 }

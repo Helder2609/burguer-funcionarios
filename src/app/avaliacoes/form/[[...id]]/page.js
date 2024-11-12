@@ -8,7 +8,6 @@ import { FaCheck } from "react-icons/fa";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
-
 import { useParams } from "next/navigation"; // Adicionado para o uso de params
 import avaliacoesValidator from "../../../../../validators/avaliacoesValidator";
 
