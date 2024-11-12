@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Formik } from "formik";
 import Link from "next/link";
@@ -13,8 +13,8 @@ import { pedidoValidator } from "../../../../../validators/pedidoValidator";
 export default function Page({ params }) {
   const route = useRouter();
   const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
-  const dados = pedidos.find((item) => item.id === params.id); // Comparação estrita
-  const pedido = dados || { cliente: "", produtos: [], total: "" }; // Inicializando produtos como um array
+  const dados = pedidos.find((item) => item.id === params.id);
+  const pedido = dados || { cliente: "", produtos: "", total: "" }; // Iniciando 'produtos' como uma string vazia
 
   const [produtos, setProdutos] = useState([]);
   useEffect(() => {
@@ -26,16 +26,11 @@ export default function Page({ params }) {
       Object.assign(pedido, dados);
     } else {
       dados.id = v4();
-      pedidos.push({
-        ...dados,
-        produtos: Array.isArray(dados.produtos)
-          ? dados.produtos
-          : [dados.produtos], // Garantindo que produtos seja um array
-      });
+      pedidos.push(dados);
     }
 
     localStorage.setItem("pedidos", JSON.stringify(pedidos));
-    return route.push("/pedidos"); // Correção na rota
+    return route.push("/pedidos");
   }
 
   return (
@@ -55,10 +50,10 @@ export default function Page({ params }) {
         <h1>{pedido.id ? "Editar Pedido" : "Adicionar Pedido"}</h1>
         <Formik
           initialValues={pedido}
-          validationSchema={pedidoValidator} // Usando o validator importado
+          validationSchema={pedidoValidator}
           onSubmit={(values) => salvar(values)}
         >
-          {({ values, handleChange, handleSubmit, errors, touched }) => (
+          {({ values, handleChange, handleSubmit, errors, touched, setFieldValue }) => (
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="cliente">
                 <Form.Label>Cliente:</Form.Label>
@@ -66,12 +61,12 @@ export default function Page({ params }) {
                   type="text"
                   name="cliente"
                   value={values.cliente}
-                  onChange={handleChange("cliente")}
-                  isInvalid={touched.cliente && errors.cliente} // Exibe o erro se houver
+                  onChange={(e) => setFieldValue("cliente", e.target.value)}
+                  isInvalid={touched.cliente && errors.cliente}
                   required
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.cliente} {/* Exibe o erro para o campo cliente */}
+                  {errors.cliente}
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -80,8 +75,8 @@ export default function Page({ params }) {
                 <Form.Select
                   name="produtos"
                   value={values.produtos}
-                  onChange={handleChange} // Atualiza o valor diretamente
-                  isInvalid={touched.produtos && errors.produtos} // Exibe o erro se houver
+                  onChange={(e) => setFieldValue("produtos", e.target.value)} // Garantindo que o valor seja uma string
+                  isInvalid={touched.produtos && errors.produtos}
                 >
                   <option value="">Selecione</option>
                   {produtos.map((item) => (
@@ -90,25 +85,24 @@ export default function Page({ params }) {
                     </option>
                   ))}
                 </Form.Select>
-
                 <Form.Control.Feedback type="invalid">
-                  {errors.produtos} {/* Exibe o erro para o campo produtos */}
+                  {errors.produtos}
                 </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="total">
                 <Form.Label>Total:</Form.Label>
                 <Form.Control
-                  type="number"
+                  type="text"
                   name="total"
                   value={values.total}
-                  onChange={handleChange("total")}
+                  onChange={(e) => setFieldValue("total", e.target.value)}
                   placeholder="Total em R$"
-                  isInvalid={touched.total && errors.total} // Exibe o erro se houver
+                  isInvalid={touched.total && errors.total}
                   required
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.total} {/* Exibe o erro para o campo total */}
+                  {errors.total}
                 </Form.Control.Feedback>
               </Form.Group>
 

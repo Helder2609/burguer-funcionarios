@@ -9,7 +9,7 @@ import { FaCheck } from "react-icons/fa";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { v4 } from "uuid";
 import { produtoValidator } from "../../../../../validators/produtoValidator";
-
+import { mask } from "remask"; // Importando a função mask
 
 export default function Page({ params }) {
     const route = useRouter();
@@ -18,24 +18,28 @@ export default function Page({ params }) {
     const produto = dados || { nome: '', categoria: '', preco: '', descricao: '', imagem: '' };
 
     const [categorias, setCategorias] = useState([]);
-    
+
     useEffect(() => {
         setCategorias(JSON.parse(localStorage.getItem('categorias')) || []);
     }, []);
 
     function salvar(dados) {
         if (produto.id) {
-            // Editando produto existente
             const index = produtos.findIndex(item => item.id === produto.id);
-            produtos[index] = dados; // Substitui o produto no array
+            produtos[index] = dados;
         } else {
-            dados.id = v4(); // Gerando novo ID para o produto
-            produtos.push(dados); // Adicionando novo produto
+            dados.id = v4();
+            produtos.push(dados);
         }
 
         localStorage.setItem('produtos', JSON.stringify(produtos));
-        return route.push('/produtos'); // Redireciona para a lista de produtos
+        return route.push('/produtos');
     }
+
+    const handleMaskedChange = (event, setFieldValue, maskPattern) => {
+        const maskedValue = mask(event.target.value, maskPattern);
+        setFieldValue(event.target.name, maskedValue);
+    };
 
     return (
         <>
@@ -61,7 +65,7 @@ export default function Page({ params }) {
                 <Formik
                     initialValues={produto}
                     onSubmit={values => salvar(values)}
-                    validationSchema={produtoValidator} // Usando o validator separado
+                    validationSchema={produtoValidator}
                 >
                     {({
                         values,
@@ -69,6 +73,7 @@ export default function Page({ params }) {
                         handleSubmit,
                         errors,
                         touched,
+                        setFieldValue,
                     }) => (
                         <Form noValidate onSubmit={handleSubmit}>
                             <Form.Group className="mb-3" controlId="nome">
@@ -78,7 +83,7 @@ export default function Page({ params }) {
                                     name="nome"
                                     value={values.nome}
                                     onChange={handleChange}
-                                    isInvalid={touched.nome && !!errors.nome} // Aplica erro de validação
+                                    isInvalid={touched.nome && !!errors.nome}
                                     required
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -92,7 +97,7 @@ export default function Page({ params }) {
                                     name="categoria"
                                     value={values.categoria}
                                     onChange={handleChange}
-                                    isInvalid={touched.categoria && !!errors.categoria} // Aplica erro de validação
+                                    isInvalid={touched.categoria && !!errors.categoria}
                                     required
                                 >
                                     <option value=''>Selecione</option>
@@ -110,11 +115,11 @@ export default function Page({ params }) {
                             <Form.Group className="mb-3" controlId="preco">
                                 <Form.Label>Preço:</Form.Label>
                                 <Form.Control
-                                    type="number"
+                                    type="text"
                                     name="preco"
                                     value={values.preco}
-                                    onChange={handleChange}
-                                    isInvalid={touched.preco && !!errors.preco} // Aplica erro de validação
+                                    onChange={e => handleMaskedChange(e, setFieldValue, ['R$ 99,99', 'R$ 999,99'])}
+                                    isInvalid={touched.preco && !!errors.preco}
                                     required
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -129,7 +134,7 @@ export default function Page({ params }) {
                                     name="descricao"
                                     value={values.descricao}
                                     onChange={handleChange}
-                                    isInvalid={touched.descricao && !!errors.descricao} // Aplica erro de validação
+                                    isInvalid={touched.descricao && !!errors.descricao}
                                     required
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -144,7 +149,7 @@ export default function Page({ params }) {
                                     name="imagem"
                                     value={values.imagem}
                                     onChange={handleChange}
-                                    isInvalid={touched.imagem && !!errors.imagem} // Aplica erro de validação
+                                    isInvalid={touched.imagem && !!errors.imagem}
                                     required
                                 />
                                 <Form.Control.Feedback type="invalid">

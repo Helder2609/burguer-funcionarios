@@ -8,22 +8,23 @@ import { FaCheck } from "react-icons/fa";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation"; // Adicionado para o uso de params
+import { useParams } from "next/navigation";
 import avaliacoesValidator from "../../../../../validators/avaliacoesValidator";
+import { mask } from "remask"; 
 
 export default function Page() {
     const route = useRouter();
-    const { id } = useParams(); // Desenrolar params usando useParams
+    const { id } = useParams();
     const [avaliacao, setAvaliacao] = useState({ id: '', nome: '', comentario: '', nota: 0 });
 
     useEffect(() => {
         const avaliacoes = JSON.parse(localStorage.getItem('avaliacoes')) || [];
-        const dados = avaliacoes.find(item => item.id === id); // Usar o id desenrolado
+        const dados = avaliacoes.find(item => item.id === id);
 
         if (dados) {
-            setAvaliacao(dados); // Carrega a avaliação ao editar
+            setAvaliacao(dados);
         }
-    }, [id]); // Dependência em id
+    }, [id]);
 
     function salvar(dados) {
         const avaliacoes = JSON.parse(localStorage.getItem('avaliacoes')) || [];
@@ -56,7 +57,7 @@ export default function Page() {
                         comentario: avaliacao.comentario,
                         nota: avaliacao.nota
                     }}
-                    enableReinitialize={true} // Habilita a atualização dos valores do formulário
+                    enableReinitialize={true}
                     validationSchema={avaliacoesValidator}
                     onSubmit={values => {
                         salvar(values);
@@ -77,7 +78,7 @@ export default function Page() {
                                     type="text"
                                     name="nome"
                                     value={values.nome}
-                                    onChange={handleChange}
+                                    onChange={e => setFieldValue('nome', mask(e.target.value, ['AAAAAAAAAAAAAAAAAAAAAAAA']))}
                                     isInvalid={touched.nome && errors.nome}
                                 />
                                 <Form.Control.Feedback type="invalid">

@@ -7,8 +7,9 @@ import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { FaCheck } from "react-icons/fa";
 import { MdOutlineArrowBack } from "react-icons/md";
-import { v4 as uuidv4 } from 'uuid'; // Importando o uuid
-import * as Yup from 'yup'; // Importando o Yup
+import { v4 as uuidv4 } from 'uuid';
+import * as Yup from 'yup';
+import { mask } from "remask"; 
 
 // Definindo o validator para o formulário de pagamento
 const formaPagamentoValidator = Yup.object({
@@ -19,7 +20,7 @@ const formaPagamentoValidator = Yup.object({
 export default function FormasPagamentoForm({ params }) {
     const route = useRouter();
     const [formasPagamento, setFormasPagamento] = useState([]);
-    
+
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem('formasPagamento')) || [];
         setFormasPagamento(data);
@@ -30,18 +31,21 @@ export default function FormasPagamentoForm({ params }) {
 
     function salvar(dados) {
         if (formaPagamento.id) {
-            // Atualiza forma de pagamento existente
             const index = formasPagamento.findIndex(item => item.id === formaPagamento.id);
             formasPagamento[index] = dados;
         } else {
-            // Adiciona nova forma de pagamento
-            dados.id = uuidv4(); // Gerando um ID único
+            dados.id = uuidv4();
             formasPagamento.push(dados);
         }
 
         localStorage.setItem('formasPagamento', JSON.stringify(formasPagamento));
-        return route.push('/pagamentos'); // Redireciona para a listagem
+        return route.push('/pagamentos');
     }
+
+    const handleMaskedChange = (event, setFieldValue, maskPattern) => {
+        const maskedValue = mask(event.target.value, maskPattern);
+        setFieldValue(event.target.name, maskedValue);
+    };
 
     return (
         <div>
@@ -55,10 +59,10 @@ export default function FormasPagamentoForm({ params }) {
                 <h1>{formaPagamento.id ? 'Editar Forma de Pagamento' : 'Adicionar Forma de Pagamento'}</h1>
                 <Formik
                     initialValues={formaPagamento}
-                    validationSchema={formaPagamentoValidator} // Aplicando o schema de validação
+                    validationSchema={formaPagamentoValidator}
                     onSubmit={values => salvar(values)}
                 >
-                    {({ values, handleChange, handleSubmit, errors, touched }) => (
+                    {({ values, handleChange, handleSubmit, errors, touched, setFieldValue }) => (
                         <Form onSubmit={handleSubmit}>
                             <Form.Group className="mb-3" controlId="nome">
                                 <Form.Label>Forma de Pagamento:</Form.Label>
@@ -66,11 +70,11 @@ export default function FormasPagamentoForm({ params }) {
                                     type="text"
                                     name="nome"
                                     value={values.nome}
-                                    onChange={handleChange('nome')}
-                                    isInvalid={touched.nome && errors.nome} // Verifica se o campo foi tocado e tem erro
+                                    onChange={e => handleMaskedChange(e, setFieldValue, ['AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'])} // Altere a máscara conforme necessário
+                                    isInvalid={touched.nome && errors.nome}
                                 />
                                 <Form.Control.Feedback type="invalid">
-                                    {errors.nome} {/* Exibe a mensagem de erro */}
+                                    {errors.nome}
                                 </Form.Control.Feedback>
                             </Form.Group>
 
