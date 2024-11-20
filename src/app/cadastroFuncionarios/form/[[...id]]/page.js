@@ -44,7 +44,13 @@ export default function Page() {
     }
 
     return (
-        <Pagina titulo="Funcionário">
+        <>
+            {/* Cabeçalho */}
+            < header id="cabecalho" className="text-center my-3" >
+                <Link href="/home" passHref>
+                    <img src="/imagens/rbg.png" alt="Logo The Burguer" width={350} height={350} />
+                </Link>
+            </header >
             <Formik
                 initialValues={funcionario}
                 validationSchema={cadastroFuncionariosValidator} // Adicionando o validator ao Formik
@@ -137,6 +143,6 @@ export default function Page() {
                     </Form>
                 )}
             </Formik>
-        </Pagina>
+        </>
     );
 }
